@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(CrossPlatformGUI)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
+
+set(PROJECT_SOURCE_FILES main.cpp)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
+
+set(THIRDPARTY_SOURCE_FILES "")
+add_subdirectory(thirdparty/imgui)
+target_sources(${PROJECT_NAME} PRIVATE ${THIRDPARTY_SOURCE_FILES})
+
+# this doesn't work
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
+         PREFIX "Implementation"
+         FILES ${PROJECT_SOURCE_FILES} ${THIRDPARTY_SOURCE_FILES})
+
+file(COPY        "${CMAKE_CURRENT_SOURCE_DIR}/data"
+     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
