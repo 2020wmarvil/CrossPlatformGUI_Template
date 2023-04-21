@@ -18,7 +18,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${THIRDPARTY_SOURCE_FILES})
 
 # this doesn't work
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}"
-         PREFIX "Implementation"
+         PREFIX "CrossPlatformGUI"
          FILES ${PROJECT_SOURCE_FILES} ${THIRDPARTY_SOURCE_FILES})
 
 file(COPY        "${CMAKE_CURRENT_SOURCE_DIR}/data"

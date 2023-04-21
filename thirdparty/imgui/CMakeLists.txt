@@ -25,6 +25,9 @@ set(IMGUI_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/implot/implot_items.cpp
 
     ${CMAKE_CURRENT_SOURCE_DIR}/imspinner/imspinner.h
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/LegitProfiler/ImGuiProfilerRenderer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/LegitProfiler/ProfilerTask.h
 )
 
 set(THIRDPARTY_SOURCE_FILES ${THIRDPARTY_SOURCE_FILES} ${IMGUI_SOURCES} PARENT_SCOPE)
