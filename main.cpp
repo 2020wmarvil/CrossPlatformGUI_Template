@@ -4,14 +4,16 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #define GL_SILENCE_DEPRECATION
-#include "GLFW/glfw3.h"   // Will drag system OpenGL headers
+#include "GLFW/glfw3.h" // Will drag system OpenGL headers
 
 #include <iostream>
 
 int main(int, char **)
 {
     glfwSetErrorCallback([](int error, const char *description)
-                         { std::cerr << "GLFW Error " << error << ": " << description << "\n"; });
+    {
+        std::cerr << "GLFW Error " << error << ": " << description << "\n";
+    });
 
     if (!glfwInit())
         return 1;
@@ -19,14 +21,13 @@ int main(int, char **)
     const char *glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    // glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
     // Create window with graphics context
     GLFWwindow *window = glfwCreateWindow(800, 600, "CrossPlatformGUI", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);   // Enable vsync
+    glfwSwapInterval(1); // Enable vsync
     glfwSetKeyCallback(window,
                        [](GLFWwindow *window, int key, int scancode, int action, int mods)
                        {
@@ -39,9 +40,9 @@ int main(int, char **)
     ImGui::CreateContext();
     ImGuiIO &io = ImGui::GetIO();
     (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;   // Enable Keyboard Controls
-    // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
     io.Fonts->AddFontFromFileTTF("data/fonts/Ruda/Ruda-Bold.ttf", 16);
 
     // Setup Dear ImGui style
@@ -103,8 +104,9 @@ int main(int, char **)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    ImGuiUtils::ProfilersWindow profilersWindow;
+    //ImGuiUtils::ProfilersWindow profilersWindow;
 
+    bool bUIShouldFillWindow = false;
     while (!glfwWindowShouldClose(window))
     {
         glfwPollEvents();
@@ -118,20 +120,31 @@ int main(int, char **)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        // Demo window; useful for finding ImGui example code
+        ImGui::ShowDemoWindow();
+
         // Main Window
         {
-            ImGui::Begin("Main Window",
-                         nullptr,
-                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration & ~ImGuiWindowFlags_NoScrollbar);
-            ImGui::SetWindowSize(ImVec2(windowWith, windowHeight));
-            ImGui::SetWindowPos(ImVec2(windowX, windowY));
+            if (bUIShouldFillWindow)
+            {
+                ImGui::Begin("Main Window",
+                             nullptr,
+                             ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration & ~ImGuiWindowFlags_NoScrollbar);
+                ImGui::SetWindowSize(ImVec2(windowWith, windowHeight));
+                ImGui::SetWindowPos(ImVec2(windowX, windowY));
+            }
+            else
+            {
+                ImGui::Begin("Main Window", nullptr);
+            }
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
             ImGui::End();
         }
 
-        profilersWindow.Render();
-
+        //profilersWindow.Render();
         ImGui::Render();
+
+        // OpenGL Rendering
         glViewport(0, 0, windowWith, windowHeight);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
